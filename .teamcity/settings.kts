@@ -2,6 +2,7 @@ import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildFeatures.FileContentReplacer
 import jetbrains.buildServer.configs.kotlin.buildFeatures.replaceContent
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
+import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetPack
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
@@ -45,12 +46,14 @@ object Build : BuildType({
         dotnetBuild {
             projects = "WebAPI/WebAPI.sln"
             sdk = "6"
-
         }
         dotnetTest {
             projects = "WebAPI/../UnitTests/UnitTests.csproj"
             sdk = "6"
-
+        }
+        dotnetPack {
+            projects = "WebAPI/WebAPI.sln"
+            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
         }
     }
 
@@ -68,5 +71,4 @@ object Build : BuildType({
             customEncodingName = ""
         }
     }
-
 })
