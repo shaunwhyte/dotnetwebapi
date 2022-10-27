@@ -43,10 +43,12 @@ object Build : BuildType({
         dotnetBuild {
             projects = "WebAPI/WebAPI.sln"
             sdk = "6"
+            configuration = "Development"
         }
         dotnetTest {
             projects = "WebAPI/../UnitTests/UnitTests.csproj"
             sdk = "6"
+
         }
     }
 
