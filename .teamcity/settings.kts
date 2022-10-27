@@ -1,4 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
+import jetbrains.buildServer.configs.kotlin.buildFeatures.FileContentReplacer
+import jetbrains.buildServer.configs.kotlin.buildFeatures.replaceContent
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
@@ -43,7 +45,6 @@ object Build : BuildType({
         dotnetBuild {
             projects = "WebAPI/WebAPI.sln"
             sdk = "6"
-            configuration = "Development"
 
         }
         dotnetTest {
@@ -57,4 +58,15 @@ object Build : BuildType({
         vcs {
         }
     }
+
+    features {
+        replaceContent {
+            fileRules = "**/appsettings.json"
+            pattern = "secret-value-for-tc"
+            regexMode = FileContentReplacer.RegexMode.FIXED_STRINGS
+            replacement = "team city"
+            customEncodingName = ""
+        }
+    }
+
 })
