@@ -39,6 +39,8 @@ project {
 object Build : BuildType({
     name = "Build From Kotlin Yay"
 
+    artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
+
     vcs {
         root(DslContext.settingsRoot)
     }
