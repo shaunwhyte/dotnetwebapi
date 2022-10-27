@@ -3,6 +3,7 @@ import jetbrains.buildServer.configs.kotlin.buildFeatures.FileContentReplacer
 import jetbrains.buildServer.configs.kotlin.buildFeatures.replaceContent
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetPack
+import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetPublish
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
@@ -53,6 +54,10 @@ object Build : BuildType({
         }
         dotnetPack {
             projects = "WebAPI/WebAPI.sln"
+            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
+        }
+        dotnetPublish {
+            projects = "WebAPI/WebAPI.csproj"
             param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
         }
     }
