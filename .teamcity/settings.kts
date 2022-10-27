@@ -32,12 +32,11 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build"
+    name = "Build From Kotlin"
 
     vcs {
         root(DslContext.settingsRoot)
     }
-
     triggers {
         vcs {
         }
