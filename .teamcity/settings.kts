@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetBuild
+import jetbrains.buildServer.configs.kotlin.buildSteps.dotnetTest
 import jetbrains.buildServer.configs.kotlin.triggers.vcs
 
 /*
@@ -41,6 +42,10 @@ object Build : BuildType({
     steps {
         dotnetBuild {
             projects = "WebAPI/WebAPI.sln"
+            sdk = "6"
+        }
+        dotnetTest {
+            projects = "WebAPI/../UnitTests/UnitTests.csproj"
             sdk = "6"
         }
     }
