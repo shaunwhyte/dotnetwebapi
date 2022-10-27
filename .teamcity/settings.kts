@@ -59,6 +59,7 @@ object Build : BuildType({
             sdk = "6"
         }
         dotnetPack {
+            enabled = false
             projects = "WebAPI/WebAPI.sln"
             param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
         }
