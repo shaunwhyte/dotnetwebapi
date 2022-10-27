@@ -44,6 +44,10 @@ object Build : BuildType({
     }
 
     steps {
+        dotnetPublish {
+            projects = "WebAPI/WebAPI.csproj"
+            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
+        }
         dotnetBuild {
             projects = "WebAPI/WebAPI.sln"
             sdk = "6"
@@ -54,10 +58,6 @@ object Build : BuildType({
         }
         dotnetPack {
             projects = "WebAPI/WebAPI.sln"
-            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
-        }
-        dotnetPublish {
-            projects = "WebAPI/WebAPI.csproj"
             param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
         }
     }
