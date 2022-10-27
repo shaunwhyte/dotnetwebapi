@@ -32,7 +32,7 @@ project {
 }
 
 object Build : BuildType({
-    name = "Build From Kotlin"
+    name = "Build From Kotlin Yay"
 
     vcs {
         root(DslContext.settingsRoot)
