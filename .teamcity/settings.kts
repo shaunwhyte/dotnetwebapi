@@ -45,7 +45,9 @@ object Build : BuildType({
 
     steps {
         dotnetPublish {
+            name = "Publish"
             projects = "WebAPI/WebAPI.csproj"
+            configuration = "Release"
             param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
         }
         dotnetBuild {
