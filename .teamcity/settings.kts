@@ -11,12 +11,13 @@ version = "2022.10"
 
 project {
 
-
-
     var bts = sequential {
         buildType(Build)
-        buildType(TestRunner("Run Unit Tests", "WebAPI/../UnitTests/UnitTests.csproj", "1"))
-        buildType(TestRunner("Run Integration Tests", "WebAPI/../IntegrationTests/IntegrationTests.csproj", "2"))
+        parallel {
+            buildType(TestRunner("Run Unit Tests", "WebAPI/../UnitTests/UnitTests.csproj", "1"))
+            buildType(TestRunner("Run Integration Tests", "WebAPI/../IntegrationTests/IntegrationTests.csproj", "2"))
+        }
+
     }.buildTypes()
 
     bts.forEach{ buildType(it) }
