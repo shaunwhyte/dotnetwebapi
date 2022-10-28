@@ -34,6 +34,12 @@ version = "2022.10"
 project {
 
     buildType(Build)
+    buildType(RunTests)
+
+    sequential {
+        buildType(Build)
+        buildType(RunTests)
+    }
 }
 
 object Build : BuildType({
@@ -50,31 +56,10 @@ object Build : BuildType({
     }
 
     steps {
-        dotnetPublish {
-            name = "Publish"
-            projects = "WebAPI/WebAPI.csproj"
-            configuration = "Release"
-            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
-        }
         dotnetBuild {
-            enabled = false
-            projects = "WebAPI/WebAPI.sln"
-            sdk = "6"
-        }
-        dotnetTest {
             enabled = true
-            projects = "WebAPI/../UnitTests/UnitTests.csproj"
-            sdk = "6"
-        }
-        dotnetPack {
-            enabled = false
             projects = "WebAPI/WebAPI.sln"
-            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
-        }
-    }
-
-    triggers {
-        vcs {
+            sdk = "6"
         }
     }
 
@@ -85,6 +70,34 @@ object Build : BuildType({
             regexMode = FileContentReplacer.RegexMode.FIXED_STRINGS
             replacement = "team city"
             customEncodingName = ""
+        }
+    }
+})
+
+object RunTests : BuildType({
+    name = "Run Tests"
+
+    artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    params {
+        param("env.random-variable", "Hi from TC")
+    }
+
+    steps {
+        dotnetTest {
+            enabled = true
+            projects = "WebAPI/../UnitTests/UnitTests.csproj"
+            sdk = "6"
+            skipBuild
+        }
+    }
+
+    triggers {
+        vcs {
         }
     }
 })
