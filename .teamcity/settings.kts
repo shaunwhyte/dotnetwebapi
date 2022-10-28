@@ -34,16 +34,17 @@ version = "2022.10"
 project {
 
     buildType(Build)
-    buildType(RunTests)
-    buildType(RunIntegrationTests)
 
-    sequential {
-        buildType(Build)
-        parallel {
-            buildType(RunTests)
-            buildType(RunIntegrationTests)
+    var bts = sequential {
+        TestRunner("Run Unit Tests", "WebAPI/../UnitTests/UnitTests.csproj", "1")
+        TestRunner("Run Integration Tests", "WebAPI/../IntegrationTests/IntegrationTests.csproj", "2")
+    }.buildTypes()
+
+    bts.forEach{buildType(it)}
+
+    bts.last().triggers {
+        vcs {
         }
-
     }
 }
 
@@ -79,8 +80,10 @@ object Build : BuildType({
     }
 })
 
-object RunTests : BuildType({
-    name = "Run Tests"
+class TestRunner(name: String, projectToRun: String, idForNow: String) : BuildType({
+
+    id(idForNow)
+    this.name = name
 
     artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
 
@@ -95,42 +98,9 @@ object RunTests : BuildType({
     steps {
         dotnetTest {
             enabled = true
-            projects = "WebAPI/../UnitTests/UnitTests.csproj"
+            projects = projectToRun
             sdk = "6"
             skipBuild
-        }
-    }
-
-    triggers {
-        vcs {
-        }
-    }
-})
-
-object RunIntegrationTests : BuildType({
-    name = "Run Integration Tests"
-
-    artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
-
-    vcs {
-        root(DslContext.settingsRoot)
-    }
-
-    params {
-        param("env.random-variable", "Hi from TC")
-    }
-
-    steps {
-        dotnetTest {
-            enabled = true
-            projects = "WebAPI/../IntegrationTests/IntegrationTests.csproj"
-            sdk = "6"
-            skipBuild
-        }
-    }
-
-    triggers {
-        vcs {
         }
     }
 })
