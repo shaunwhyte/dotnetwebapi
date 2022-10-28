@@ -60,7 +60,7 @@ object Build : BuildType({
 
 class TestRunner(name: String, projectToRun: String, idForNow: String) : BuildType({
 
-    id(idForNow)
+    id(name.toId())
     this.name = name
 
     artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
