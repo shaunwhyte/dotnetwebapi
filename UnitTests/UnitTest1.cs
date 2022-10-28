@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using Xunit;
 
 namespace UnitTests
@@ -6,10 +7,10 @@ namespace UnitTests
     public class UnitTest1
     {
         [Fact]
-        public void Test1()
+        public async void SlowTest()
         {
+            Thread.Sleep(5000);
             Assert.True(true);
-            System.Console.WriteLine("TEST CONSOLE OUTPUT " + Environment.GetEnvironmentVariable("random-variable"));
         }
     }
 }

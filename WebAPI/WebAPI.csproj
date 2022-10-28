@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Configurations>Debug;Release;Development;Test</Configurations>
     <IsPackable>true</IsPackable>
+    <UserSecretsId>30d1ed7a-8b00-45b6-b60a-50698dca395c</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

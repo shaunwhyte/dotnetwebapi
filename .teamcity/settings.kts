@@ -35,10 +35,15 @@ project {
 
     buildType(Build)
     buildType(RunTests)
+    buildType(RunIntegrationTests)
 
     sequential {
         buildType(Build)
-        buildType(RunTests)
+        parallel {
+            buildType(RunTests)
+            buildType(RunIntegrationTests)
+        }
+
     }
 }
 
@@ -91,6 +96,34 @@ object RunTests : BuildType({
         dotnetTest {
             enabled = true
             projects = "WebAPI/../UnitTests/UnitTests.csproj"
+            sdk = "6"
+            skipBuild
+        }
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+})
+
+object RunIntegrationTests : BuildType({
+    name = "Run Integration Tests"
+
+    artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    params {
+        param("env.random-variable", "Hi from TC")
+    }
+
+    steps {
+        dotnetTest {
+            enabled = true
+            projects = "WebAPI/../IntegrationTests/IntegrationTests.csproj"
             sdk = "6"
             skipBuild
         }
