@@ -14,10 +14,10 @@ project {
     var bts = sequential {
         buildType(Build)
         parallel {
-            buildType(TestRunner("Run Unit Tests", "WebAPI/../UnitTests/UnitTests.csproj", "1"))
-            buildType(TestRunner("Run Integration Tests", "WebAPI/../IntegrationTests/IntegrationTests.csproj", "2"))
+            buildType(TestRunner("Run Unit Tests", "WebAPI/../UnitTests/UnitTests.csproj"))
+            buildType(TestRunner("Run Integration Tests", "WebAPI/../IntegrationTests/IntegrationTests.csproj"))
         }
-
+        buildType(Publish)
     }.buildTypes()
 
     bts.forEach{ buildType(it) }
@@ -60,7 +60,7 @@ object Build : BuildType({
     }
 })
 
-class TestRunner(name: String, projectToRun: String, idForNow: String) : BuildType({
+class TestRunner(name: String, projectToRun: String) : BuildType({
 
     id(name.toId())
     this.name = name
@@ -81,6 +81,39 @@ class TestRunner(name: String, projectToRun: String, idForNow: String) : BuildTy
             projects = projectToRun
             sdk = "6"
             skipBuild
+        }
+    }
+})
+
+object Publish : BuildType({
+    name = "Publish"
+
+    artifactRules = "WebAPI/bin/Release/net6.0/publish => teamcity-%build.counter%.zip"
+
+    vcs {
+        root(DslContext.settingsRoot)
+    }
+
+    params {
+        param("env.random-variable", "Hi from TC")
+    }
+
+    steps {
+        dotnetPublish {
+            name = "Publish"
+            projects = "WebAPI/WebAPI.csproj"
+            configuration = "Release"
+            param("dotNetCoverage.dotCover.home.path", "%teamcity.tool.JetBrains.dotCover.CommandLineTools.DEFAULT%")
+        }
+    }
+
+    features {
+        replaceContent {
+            fileRules = "**/appsettings.json"
+            pattern = "secret-value-for-tc"
+            regexMode = FileContentReplacer.RegexMode.FIXED_STRINGS
+            replacement = "team city"
+            customEncodingName = ""
         }
     }
 })
