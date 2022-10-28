@@ -58,7 +58,7 @@ object Build : BuildType({
             sdk = "6"
         }
         dotnetTest {
-            enabled = false
+            enabled = true
             projects = "WebAPI/../UnitTests/UnitTests.csproj"
             sdk = "6"
         }

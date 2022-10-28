@@ -1,3 +1,4 @@
+using System;
 using Xunit;
 
 namespace UnitTests
@@ -8,6 +9,7 @@ namespace UnitTests
         public void Test1()
         {
             Assert.True(true);
+            System.Console.WriteLine("TEST CONSOLE OUTPUT " + Environment.GetEnvironmentVariable("random-variable"));
         }
     }
 }
