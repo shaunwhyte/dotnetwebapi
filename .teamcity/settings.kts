@@ -45,6 +45,10 @@ object Build : BuildType({
         root(DslContext.settingsRoot)
     }
 
+    params {
+        param("env.random-variable", "Hi from TC")
+    }
+
     steps {
         dotnetPublish {
             name = "Publish"
